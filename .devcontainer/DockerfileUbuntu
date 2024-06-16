@@ -1,0 +1,26 @@
+FROM ubuntu:24.04
+LABEL maintainer="janhkrueger@outlook.com"
+
+ENV LC_ALL de_DE.UTF-8
+ENV LANG de_DE.UTF-8
+ENV LANGUAGE de_DE:de
+
+RUN TZ=UTC  && \
+    export DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt install -y tzdata gpg curl apt-utils lsb-release locales locales-all ca-certificates gnupg2 git ssh && \
+    apt-get update && apt-get -qq -y upgrade
+
+# Removing of software-properties-common because it is only needed for Pistache Install
+RUN apt-get -y remove software-properties-common && \
+    apt-get update && apt-get -qq -y upgrade && \
+    apt-get -qq -y dist-upgrade && \
+    apt-get clean autoclean && \
+    apt-get autoremove -y && \
+    rm -rf /var/cache/* && \
+    rm -rf /var/log/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/*
+
+RUN ldconfig

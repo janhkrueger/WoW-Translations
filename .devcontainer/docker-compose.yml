@@ -1,0 +1,24 @@
+services:
+  app:
+    image: wow-translator/base
+    build:
+      dockerfile: DockerfileUbuntu
+
+    volumes:
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.ssh:/root/.ssh
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "${LOGSIZE}"
+        max-file: 2
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+networks:
+  default:
+    name: wow-translations_default
